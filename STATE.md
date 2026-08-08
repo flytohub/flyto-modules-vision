@@ -1,6 +1,18 @@
 # State
 
-- **0.1.0, unreleased.** 35 tests pass with no camera and no flyto-core.
+- **0.1.0, unreleased.** 37 tests pass with no camera and no flyto-core.
+
+- `vision.observe` declares `provides_capability` so a host learns what
+  installing this package made available, instead of an operator hand-typing
+  the capability into a command. Verified against a built wheel in a clean venv
+  with flyto-core: `discover_plugins()` then `capabilities()` returns
+  `{'vision.observe': ['vision.observe']}`.
+
+  This is the **Python** binding of the contribution point. A plugin written in
+  another language cannot use the `flyto.modules` entry point at all, and the
+  owner's requirement is explicitly that plugins are not language-restricted.
+  The language-neutral manifest that would serve those is a separate contract
+  and does not exist yet; nothing here should be read as though it does.
 
 - Verified against the real counterparties, not stand-ins:
   - a built wheel installed into a clean venv with real flyto-core 2.27.0 is

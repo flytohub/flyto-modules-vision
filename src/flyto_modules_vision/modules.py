@@ -30,7 +30,7 @@ from typing import Any
 
 from .gateway import GatewayError, fetch_observations, gateway_url
 from .observation import ObservationError, for_zone, parse
-from .steps import MODULE_OBSERVE
+from .steps import CAPABILITIES, MODULE_OBSERVE
 
 __all__ = ["MODULE_OBSERVE", "build_modules"]
 
@@ -84,6 +84,12 @@ def build_modules(base_module, register_module) -> list[tuple[str, type]]:
         version="1.0.0",
         category=CATEGORY,
         subcategory="observe",
+        # The contribution point. Installing this package is what makes
+        # "something has to go and look" answerable: a host reads the declared
+        # capability off the registry instead of an operator hand-typing it
+        # into a command, which is what "install the plugin and it works" has
+        # to mean. Declared from the one table that owns these ids.
+        provides_capability=CAPABILITIES[MODULE_OBSERVE],
         tags=["camera", "vision", "zone", "evidence", "observe"],
         label="Observe Zone",
         label_key="modules.vision.observe.label",

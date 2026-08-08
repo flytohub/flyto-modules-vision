@@ -41,7 +41,7 @@ constraints below are the product, not style preferences.
 PYTHONPATH=src:. python -m pytest tests/ -q
 ```
 
-35 tests, none needing a camera or `flyto-core`. Any change to the observation
+37 tests, none needing a camera or `flyto-core`. Any change to the observation
 shape, to where the address comes from, or to what is refused needs a test that
 would fail without it.
 

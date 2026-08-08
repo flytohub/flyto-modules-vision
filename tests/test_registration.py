@@ -102,3 +102,31 @@ def test_the_package_imports_without_flyto_core():
 def test_each_module_states_the_capability_it_provides(module_id, capability):
     """What flyto-cloud's evidence layer matches a gap against."""
     assert capability and isinstance(capability, str)
+
+
+def test_each_module_declares_its_capability_to_the_host():
+    """The contribution point, pinned.
+
+    Without this the package is a step in the builder that the evidence layer
+    cannot find: installing it would make nothing answerable until an operator
+    hand-typed the capability into a command somewhere else. That is the gap
+    between "an extension" and "an extension the host can use".
+    """
+    declared = {}
+
+    def register_module(**meta):
+        declared[meta["module_id"]] = meta.get("provides_capability")
+
+        def decorate(cls):
+            return cls
+
+        return decorate
+
+    build_modules(StandInBase, register_module)
+    assert declared == CAPABILITIES
+
+
+def test_a_declared_capability_is_never_blank():
+    """A blank declaration reads as 'declares nothing' and is worse than absent."""
+    for module_id, capability in CAPABILITIES.items():
+        assert capability.strip(), f"{module_id} declares a blank capability"
