@@ -18,6 +18,10 @@ constraints below are the product, not style preferences.
 - **The observation path is contract, not configuration.** An operator who can
   set the path can point a step at anything returning JSON, and the step would
   report whatever came back as evidence.
+- **No absent-means-true booleans on the wire.** `usable` must be stated. This
+  is a cross-language boundary and `false` is the zero value in most languages,
+  so an omitted boolean silently inverts the field that decides whether a
+  mission counts as proven. Verified: Go's `json:"usable,omitempty"` drops it.
 - **Refuse malformed, forward unfamiliar.** Whether a kind exists is
   flyto-cloud's question and it already names unknown kinds on the task's
   timeline. A second copy of that vocabulary here would drift.
@@ -41,7 +45,7 @@ constraints below are the product, not style preferences.
 PYTHONPATH=src:. python -m pytest tests/ -q
 ```
 
-37 tests, none needing a camera or `flyto-core`. Any change to the observation
+38 tests, none needing a camera or `flyto-core`. Any change to the observation
 shape, to where the address comes from, or to what is refused needs a test that
 would fail without it.
 

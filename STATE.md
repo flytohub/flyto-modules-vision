@@ -1,6 +1,6 @@
 # State
 
-- **0.1.0, unreleased.** 37 tests pass with no camera and no flyto-core.
+- **0.1.0, unreleased.** 38 tests pass with no camera and no flyto-core.
 
 - `vision.observe` declares `provides_capability` so a host learns what
   installing this package made available, instead of an operator hand-typing

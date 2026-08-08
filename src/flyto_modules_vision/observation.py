@@ -38,11 +38,26 @@ def _one(raw: Any, *, index: int) -> dict[str, Any]:
     if not isinstance(kind, str) or not kind.strip():
         raise ObservationError(f"observation {index} has no kind")
 
-    # Absent means usable: a producer that reports a finding without arguing
-    # about it is making a positive claim, and the robot's own runner already
-    # reports that way. Present-but-not-a-bool is a different thing — it means
-    # the producer tried to say something and this cannot tell what.
-    usable = raw.get("usable", True)
+    # `usable` must be stated. It is tempting to let absent mean usable — a
+    # producer reporting a finding without arguing about it looks like a
+    # positive claim — and that is exactly the trap, because this is a
+    # cross-language boundary and `false` is the zero value in most of them.
+    #
+    # Go's most copy-pasted struct tag, `json:"usable,omitempty"` on a bool,
+    # emits {"kind":"zone.overview"} for Usable: false — verified by running it.
+    # Jackson's NON_DEFAULT does the same. So the one field that decides whether
+    # a mission counts as proven would silently invert: a plugin saying "I
+    # looked and the view was blocked" would be read as usable evidence, with
+    # nothing raising anywhere.
+    #
+    # An absent value is therefore refused rather than guessed. A producer that
+    # cannot say whether what it saw was usable has not told us what we asked.
+    if "usable" not in raw:
+        raise ObservationError(
+            f"observation {index} does not say whether it is usable; state it "
+            "explicitly, because an omitted boolean is false in most languages"
+        )
+    usable = raw["usable"]
     if not isinstance(usable, bool):
         raise ObservationError(
             f"observation {index} has a non-boolean usable: {usable!r}"

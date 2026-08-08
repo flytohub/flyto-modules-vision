@@ -77,7 +77,7 @@ that could really do it.
 PYTHONPATH=src:. python -m pytest tests/ -q
 ```
 
-37 tests, none needing a camera or flyto-core.
+38 tests, none needing a camera or flyto-core.
 
 ## Licence
 
