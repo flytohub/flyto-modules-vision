@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flyto-modules-vision"
+version = "0.1.0"
+description = "Optional camera-observation modules for Flyto2 workflows"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Flyto2" }]
+keywords = ["flyto", "vision", "camera", "workflow", "automation", "evidence"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Video :: Capture",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+# None, and that is the point. No image library, no HTTP client: the package
+# reads an already-taken observation over the standard library, so it installs
+# anywhere the engine does and adds nothing to the desktop build. Decoding
+# pixels belongs to whatever owns the camera, not to a workflow step.
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/flytohub/flyto-modules-vision"
+Source = "https://github.com/flytohub/flyto-modules-vision"
+Issues = "https://github.com/flytohub/flyto-modules-vision/issues"
+
+# Discovered by flyto-core's ModuleRegistry.discover_plugins(). Installing this
+# package is the only thing that makes "go and look" authorable in the builder.
+[project.entry-points."flyto.modules"]
+vision = "flyto_modules_vision:register_all"
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
