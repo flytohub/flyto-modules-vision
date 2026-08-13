@@ -4,6 +4,8 @@
 
 - Publish 0.1.0 to PyPI through Trusted Publishing.
 - A worked example of an authored command using `vision.observe`.
+- A Pi execution integration, if the runner deliberately gains support beyond
+  robotics actions; it currently rejects `vision.observe`.
 
 ## Later
 

@@ -1,0 +1,57 @@
+# Repository-owned verification contract for the audited Flyto coding route.
+# These checks are local, bounded, and required after every implementation
+# round. No camera, gateway, network, credentials, or external capability is
+# needed to run them.
+version: flyto.coding-config.v1
+
+checks:
+  - name: compile
+    argv: ["/Users/chester/flytohub/flyto-ai/.venv/bin/python", "-m", "compileall", "-q", "src", "tests", "scripts"]
+    timeout_seconds: 300
+    required: true
+
+  - name: lint
+    argv: ["/Users/chester/flytohub/flyto-ai/.venv/bin/python", "-m", "ruff", "check", "--no-cache", "src", "tests", "scripts"]
+    timeout_seconds: 300
+    required: true
+
+  - name: tests
+    argv: ["/Users/chester/flytohub/flyto-ai/.venv/bin/python", "-m", "pytest", "-p", "no:cacheprovider", "-o", "pythonpath=src", "tests", "-q"]
+    timeout_seconds: 900
+    required: true
+
+  # The distribution is part of the contract, not an afterthought at release
+  # time. This package's whole contribution arrives through an entry point in
+  # the built metadata, so a build that stops producing one is a broken
+  # package even while every unit test still passes.
+  - name: build
+    argv: ["/Users/chester/flytohub/flyto-ai/.venv/bin/python", "-m", "build"]
+    timeout_seconds: 900
+    required: true
+
+  # The two artefacts are named rather than globbed. `dist/*` passes on
+  # whatever happens to be lying in the directory — a stale wheel from an
+  # earlier version, or a single file when the build silently produced one of
+  # the two — so the check would report success for a distribution nobody
+  # built in this round. Naming version 0.1.0's wheel and sdist makes the
+  # check fail on a version bump that did not reach the metadata, and makes
+  # "verified" mean the same thing on every machine that runs it.
+  - name: package-check
+    argv:
+      - "/Users/chester/flytohub/flyto-ai/.venv/bin/python"
+      - "-m"
+      - "twine"
+      - "check"
+      - "dist/flyto_modules_vision-0.1.0-py3-none-any.whl"
+      - "dist/flyto_modules_vision-0.1.0.tar.gz"
+    timeout_seconds: 300
+    required: true
+
+  # The gate that catches an index, a document or an instruction file drifting
+  # away from the code. It reads the repository and rebuilds the local index;
+  # it does not execute the checks above, so declaring it here is a statement
+  # of what "verified" means, not a loop.
+  - name: index-verify
+    argv: ["flyto-index", "verify", ".", "--full-scan", "--strict", "--json"]
+    timeout_seconds: 900
+    required: true

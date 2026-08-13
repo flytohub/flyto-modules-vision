@@ -13,6 +13,7 @@ import pytest
 
 from flyto_modules_vision.observation import (
     MAX_OBSERVATIONS,
+    MAX_SOURCE_IDENTIFIER_LENGTH,
     ObservationError,
     for_zone,
     parse,
@@ -33,6 +34,93 @@ def test_an_unusable_view_is_kept_not_dropped():
 def test_an_unfamiliar_kind_is_forwarded_to_be_named_upstream():
     out = parse([{"kind": "zone.thermal", "usable": True}])
     assert out[0]["kind"] == "zone.thermal"
+
+
+def test_source_provenance_is_preserved_for_a_future_provider():
+    source = {"provider": "future-provider.v2", "source_id": "gateway:zone-7"}
+    out = parse([{"kind": "zone.overview", "usable": True, "source": source}])
+    assert out[0]["source"] == source
+
+
+def test_source_provenance_is_copied_not_aliased():
+    source = {"provider": "open-provider", "source_id": "source_1"}
+    out = parse([{"kind": "zone.overview", "usable": True, "source": source}])
+    assert out[0]["source"] is not source
+    source["source_id"] = "changed"
+    assert out[0]["source"]["source_id"] == "source_1"
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        None,
+        "provider/source",
+        {},
+        {"provider": "known"},
+        {"source_id": "one"},
+        {"provider": "known", "source_id": "one", "device_id": "camera-1"},
+        {"provider": "", "source_id": "one"},
+        {"provider": " known", "source_id": "one"},
+        {"provider": "known/provider", "source_id": "one"},
+        {"provider": "knøwn", "source_id": "one"},
+        {"provider": 7, "source_id": "one"},
+    ],
+)
+def test_malformed_source_provenance_is_refused(source):
+    with pytest.raises(ObservationError, match="source"):
+        parse([{"kind": "zone.overview", "usable": True, "source": source}])
+
+
+@pytest.mark.parametrize("field", ["provider", "source_id"])
+def test_each_source_identifier_rejects_an_over_limit_value(field):
+    source = {"provider": "future-neutral-provider", "source_id": "source-1"}
+    source[field] = "x" * (MAX_SOURCE_IDENTIFIER_LENGTH + 1)
+
+    with pytest.raises(ObservationError, match=rf"source {field}"):
+        parse([{"kind": "zone.overview", "usable": True, "source": source}])
+
+
+@pytest.mark.parametrize("extra_key", ["topic", "device", "device_id", "pixels"])
+def test_each_forbidden_nested_source_key_is_refused(extra_key):
+    source = {
+        "provider": "future-neutral-provider",
+        "source_id": "source-1",
+        extra_key: "not-provenance",
+    }
+
+    with pytest.raises(ObservationError, match="exactly provider and source_id"):
+        parse([{"kind": "zone.overview", "usable": True, "source": source}])
+
+
+def test_pixel_device_and_topic_fields_are_not_forwarded():
+    out = parse(
+        [
+            {
+                "kind": "zone.overview",
+                "usable": True,
+                "source": {"provider": "gateway", "source_id": "zone-1"},
+                "pixels": "raw",
+                "image": "encoded",
+                "frame": {"bytes": "raw"},
+                "device": "camera",
+                "device_id": "camera-1",
+                "topic": "camera/front",
+            }
+        ]
+    )
+    assert out == [
+        {
+            "kind": "zone.overview",
+            "usable": True,
+            "source": {"provider": "gateway", "source_id": "zone-1"},
+        }
+    ]
+
+
+def test_legacy_observation_without_source_remains_accepted():
+    assert parse([{"kind": "zone.overview", "usable": True}]) == [
+        {"kind": "zone.overview", "usable": True}
+    ]
 
 
 def test_an_omitted_usable_is_refused_not_guessed():
@@ -112,6 +200,14 @@ def test_a_zone_filter_keeps_only_that_zone():
         ]
     )
     assert [i["zone"] for i in for_zone(items, "bay")] == ["bay"]
+
+
+def test_zone_filter_preserves_source_provenance():
+    source = {"provider": "gateway", "source_id": "bay-1"}
+    items = parse(
+        [{"kind": "zone.overview", "usable": True, "zone": "bay", "source": source}]
+    )
+    assert for_zone(items, "bay")[0]["source"] == source
 
 
 def test_an_observation_with_no_zone_is_dropped_by_a_zone_filter():

@@ -10,4 +10,13 @@ project-memory files at the repository root:
 - `ROADMAP.md` — `vision.read_code` and `vision.record`, and what they need
 - `README.md` — installation and the step's contract
 
+The observation contract includes optional, bounded `provider`/`source_id`
+provenance. `README.md` states the exact parser boundary and the continuing Pi
+runner limitation.
+
+Evidence that the loop really closed is not prose: `results/` holds the recorded
+real runs, and `scripts/verify_real_camera_closed_loop.py` both produces them
+against a live loopback gateway and re-checks a recorded one against its own
+digest without contacting anything. `README.md` gives the exact commands.
+
 Handoffs are in `handoffs/`, indexed by `handoffs/_registry.md`.

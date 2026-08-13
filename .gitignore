@@ -2,6 +2,15 @@ __pycache__/
 *.pyc
 *.egg-info/
 .pytest_cache/
+.ruff_cache/
 build/
 dist/
 .venv/
+
+# Generated code index. It is rebuilt from the working tree by `flyto-index
+# scan` and by the post-commit hook, so a committed copy is a second source of
+# truth that is stale the moment anyone edits a file. Only the generated
+# directory is ignored: `.flyto/coding.yaml` is hand-written contract and stays
+# tracked, and so does everything under `results/`, which is a recorded run and
+# cannot be regenerated.
+.flyto-index/

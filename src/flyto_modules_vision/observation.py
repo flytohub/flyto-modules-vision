@@ -18,16 +18,42 @@ what is merely unfamiliar.
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 # A gateway that answers with thousands of items is malfunctioning, and a step
 # that forwarded them would push that malfunction into the task record. The
 # cloud caps what it reads anyway; this is the earlier, louder cap.
 MAX_OBSERVATIONS = 32
+MAX_SOURCE_IDENTIFIER_LENGTH = 128
+
+_SOURCE_KEYS = frozenset({"provider", "source_id"})
+_SAFE_SOURCE_IDENTIFIER = re.compile(
+    rf"[A-Za-z0-9][A-Za-z0-9._:-]{{0,{MAX_SOURCE_IDENTIFIER_LENGTH - 1}}}\Z"
+)
 
 
 class ObservationError(ValueError):
     """The gateway answered, but not with observations."""
+
+
+def _source(raw: Any, *, index: int) -> dict[str, str]:
+    if not isinstance(raw, dict):
+        raise ObservationError(f"observation {index} source is not an object")
+    if set(raw) != _SOURCE_KEYS:
+        raise ObservationError(
+            f"observation {index} source must contain exactly provider and source_id"
+        )
+
+    source: dict[str, str] = {}
+    for field in ("provider", "source_id"):
+        value = raw[field]
+        if not isinstance(value, str) or not _SAFE_SOURCE_IDENTIFIER.fullmatch(value):
+            raise ObservationError(
+                f"observation {index} source {field} is not a safe bounded ASCII identifier"
+            )
+        source[field] = value
+    return source
 
 
 def _one(raw: Any, *, index: int) -> dict[str, Any]:
@@ -70,6 +96,8 @@ def _one(raw: Any, *, index: int) -> dict[str, Any]:
     zone = raw.get("zone")
     if isinstance(zone, str) and zone.strip():
         item["zone"] = zone.strip()
+    if "source" in raw:
+        item["source"] = _source(raw["source"], index=index)
     return item
 
 

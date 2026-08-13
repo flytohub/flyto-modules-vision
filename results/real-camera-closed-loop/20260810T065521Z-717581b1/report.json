@@ -1,0 +1,121 @@
+{
+  "boundaries": {
+    "camera_access_attempts": [],
+    "camera_capture": false,
+    "gateway_read": true,
+    "loopback_only": true,
+    "notes": [
+      "This run never opened a camera and never read image bytes or pixels. It made exactly one HTTP GET, to the configured loopback gateway, through flyto-core's public module registry. No credential value is read or recorded.",
+      "The wheel built from this checkout was installed into a throwaway directory; the working tree was not importable. The gateway address is configuration, no step parameter can name a host, and the observation path is contract.",
+      "A gateway-derived observation proves the gateway reported it. It does not prove the identity of any camera device behind that gateway, nor that a camera exists."
+    ],
+    "pixel_decode": false
+  },
+  "contract": "flyto.modules-vision.real-camera-closed-loop.v1",
+  "evidence": [
+    {
+      "detail": "physical UVC frame 640x480 sha256 7dfe3d23a4c5; luminance avg 130.728, range 21-234",
+      "kind": "zone.overview",
+      "usable": true,
+      "zone": "exhibition"
+    }
+  ],
+  "gateway": {
+    "authority": "127.0.0.1:9010",
+    "base_url": "http://127.0.0.1:9010",
+    "connect_hosts": [
+      "127.0.0.1"
+    ],
+    "credentials_present": false,
+    "loopback_only": true,
+    "observation_path": "/api/spaces/zone-camera/observation",
+    "observation_path_is_contract": true,
+    "observation_url": "http://127.0.0.1:9010/api/spaces/zone-camera/observation",
+    "request_count": 1,
+    "requests": [
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:9010/api/spaces/zone-camera/observation"
+      }
+    ],
+    "scheme": "http"
+  },
+  "outcome": "passed",
+  "package": {
+    "imported_from": "/private/var/folders/br/vphq8z993m13_5z1xlkzth200000gn/T/flyto-vision-verify-beoyd6hc/target/flyto_modules_vision/__init__.py",
+    "imported_from_working_tree": false,
+    "installed_location": "/private/var/folders/br/vphq8z993m13_5z1xlkzth200000gn/T/flyto-vision-verify-beoyd6hc/target",
+    "name": "flyto-modules-vision",
+    "observation_path": "/api/spaces/zone-camera/observation",
+    "package_version": "0.1.0",
+    "wheel_filename": "flyto_modules_vision-0.1.0-py3-none-any.whl",
+    "wheel_sha256": "41e5aaf4a0ef675a5f10e8db1e5f88462b3e9b5e38a1f80fcb59c27ab7f2b1b0"
+  },
+  "params": {
+    "zone": "exhibition"
+  },
+  "passed": true,
+  "provenance": {
+    "checkout": "/Users/chester/flytohub/flyto-modules-vision",
+    "checkout_revision": "bf4d60394289f0b23e13b6abce3f87082b9e5c9a",
+    "clock": "UTC",
+    "core_revision": "17f8cf7b417182ea554f6668035b974e5d28f218",
+    "core_src": "/Users/chester/flytohub/flyto-core/src",
+    "finished_utc": "20260810T065525Z",
+    "platform": "macOS-14.7.6-arm64-arm-64bit",
+    "python_executable": "/Users/chester/flytohub/flyto-ai/.venv/bin/python",
+    "python_version": "3.11.15 (main, Mar  3 2026, 00:52:57) [Clang 16.0.0 (clang-1600.0.26.6)]",
+    "started_utc": "20260810T065521Z",
+    "verifier": "scripts/verify_real_camera_closed_loop.py",
+    "verifier_sha256": "cfb6e52a73e59d6942e5271ea24fee2c8c5a40c48980b12bdc998c6408db9e4a"
+  },
+  "registry": {
+    "capability": {
+      "vision.observe": [
+        "vision.observe"
+      ]
+    },
+    "entry_point_group": "flyto.modules",
+    "entry_point_name": "vision",
+    "envelope_keys_unwrapped": [],
+    "plugins_discovered": [
+      "community",
+      "vision"
+    ],
+    "public_apis_used": [
+      "clear",
+      "discover_plugins",
+      "get_plugins",
+      "get_plugin_modules",
+      "capabilities",
+      "execute"
+    ],
+    "registry_import_path": "core.modules.registry",
+    "vision_plugin_modules": [
+      "vision.observe"
+    ]
+  },
+  "result": {
+    "evidence": [
+      {
+        "detail": "physical UVC frame 640x480 sha256 7dfe3d23a4c5; luminance avg 130.728, range 21-234",
+        "kind": "zone.overview",
+        "usable": true,
+        "zone": "exhibition"
+      }
+    ],
+    "observed": 1,
+    "usable": 1,
+    "zone": "exhibition"
+  },
+  "run_id": "20260810T065521Z-717581b1",
+  "summary": {
+    "kinds": [
+      "zone.overview"
+    ],
+    "observed": 1,
+    "selected": 1,
+    "usable": 1,
+    "zone": "exhibition"
+  }
+}

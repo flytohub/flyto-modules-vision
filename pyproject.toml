@@ -38,6 +38,9 @@ Issues = "https://github.com/flytohub/flyto-modules-vision/issues"
 [project.entry-points."flyto.modules"]
 vision = "flyto_modules_vision:register_all"
 
+[project.entry-points."flyto.device_executors"]
+vision = "flyto_modules_vision.device_executor:executor"
+
 [project.optional-dependencies]
 dev = ["pytest>=8"]
 

@@ -1,0 +1,116 @@
+{
+  "boundaries": {
+    "camera_capture": false,
+    "gateway_read": true,
+    "loopback_only": true,
+    "notes": [
+      "This run never opened a camera and never read image bytes or pixels.",
+      "It made exactly one HTTP GET, to the configured loopback gateway, through flyto-core's public ModuleRegistry.execute.",
+      "The gateway address is configuration; no step parameter can name a host.",
+      "The observation path is contract, not configuration.",
+      "A gateway-derived observation proves the gateway reported it. It does not prove the identity of any camera device behind that gateway."
+    ],
+    "pixel_decode": false
+  },
+  "contract": "flyto.modules-vision.real-camera-closed-loop.v1",
+  "evidence": [
+    {
+      "detail": "arena: view_ok (3.0s ago, mean 145, spread 40)",
+      "kind": "zone.overview",
+      "usable": true,
+      "zone": "arena"
+    }
+  ],
+  "gateway": {
+    "authority": "127.0.0.1:9010",
+    "base_url": "http://127.0.0.1:9010",
+    "connect_hosts": [
+      "127.0.0.1"
+    ],
+    "credentials_present": false,
+    "loopback_only": true,
+    "observation_url": "http://127.0.0.1:9010/api/spaces/zone-camera/observation",
+    "requests_made": [
+      "http://127.0.0.1:9010/api/spaces/zone-camera/observation"
+    ],
+    "scheme": "http"
+  },
+  "outcome": "passed",
+  "package": {
+    "imported_from": "/private/var/folders/br/vphq8z993m13_5z1xlkzth200000gn/T/flyto-vision-verify-49d57qxz/target/flyto_modules_vision/__init__.py",
+    "installed_location": "/private/var/folders/br/vphq8z993m13_5z1xlkzth200000gn/T/flyto-vision-verify-49d57qxz/target",
+    "name": "flyto-modules-vision",
+    "observation_path": "/api/spaces/zone-camera/observation",
+    "observation_path_is_contract": true,
+    "version": "0.1.0",
+    "wheel_filename": "flyto_modules_vision-0.1.0-py3-none-any.whl",
+    "wheel_sha256": "3f332cfd7cc4bb9632ab9ac0d3d09c74b3014e4774a4687ed306a60629f9b211"
+  },
+  "params": {
+    "zone": "arena"
+  },
+  "provenance": {
+    "checkout": "/Users/chester/flytohub/flyto-modules-vision",
+    "clock": "UTC",
+    "core_src": "/Users/chester/flytohub/flyto-core/src",
+    "finished_utc": "2026-08-09T12:42:37Z",
+    "platform": "macOS-14.7.6-arm64-arm-64bit",
+    "probe": "scripts/_real_camera_probe.py",
+    "probe_sha256": "76ffa36d3ca2a63ab5a9173f63d12f1a978b5d84fede586732600c4dced16f7b",
+    "python_executable": "/Users/chester/flytohub/flyto-ai/.venv/bin/python",
+    "python_version": "3.11.15 (main, Mar  3 2026, 00:52:57) [Clang 16.0.0 (clang-1600.0.26.6)]",
+    "started_utc": "2026-08-09T12:42:33Z",
+    "verifier": "scripts/verify_real_camera_closed_loop.py",
+    "verifier_sha256": "ce3374445b292fd8f4b9da900025f9f21c3d3c92b38142896bca74a8c5302fd1"
+  },
+  "registry": {
+    "capability": {
+      "vision.observe": [
+        "vision.observe"
+      ]
+    },
+    "entry_point_group": "flyto.modules",
+    "entry_point_name": "vision",
+    "entry_point_value": "flyto_modules_vision:register_all",
+    "envelope_keys_unwrapped": [],
+    "import_path": "core.modules.registry.ModuleRegistry",
+    "plugins_discovered": [
+      "community",
+      "vision"
+    ],
+    "public_apis_used": [
+      "clear",
+      "discover_plugins",
+      "get_plugins",
+      "get_plugin_modules",
+      "capabilities",
+      "execute"
+    ],
+    "vision_plugin_modules": [
+      "vision.observe"
+    ]
+  },
+  "result": {
+    "evidence": [
+      {
+        "detail": "arena: view_ok (3.0s ago, mean 145, spread 40)",
+        "kind": "zone.overview",
+        "usable": true,
+        "zone": "arena"
+      }
+    ],
+    "observed": 1,
+    "usable": 1,
+    "zone": "arena"
+  },
+  "run_id": "20260809T124233Z-f9e256cd",
+  "summary": {
+    "kinds": [
+      "zone.overview"
+    ],
+    "observed": 1,
+    "selected": 1,
+    "usable": 1,
+    "zone": "arena"
+  }
+}
