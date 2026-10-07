@@ -3,6 +3,15 @@
 - **0.1.0, unreleased.** The offline suite passes with no camera, no gateway, no
   network and no flyto-core.
 
+- **CI green again on 2026-10-08.** The only CI run on main (2026-08-13) failed
+  at lint: Ruff 0.16 widened its default rules and the package declared none.
+  `[tool.ruff.lint] select` is now declared and guarded by
+  `tests/test_repository_contract.py`. Behind it, the 3.12 leg could not build
+  the no-isolation wheel (no setuptools on 3.12); CI now installs the declared
+  `build-system` requirements. Locally with Ruff 0.16.10 on Python 3.11 and
+  3.12: compile, lint, 176 tests, build, Twine check, and
+  `flyto-index verify . --full-scan --strict --json` (20/20) passed.
+
 - `vision.observe` declares `provides_capability` so a host learns what
   installing this package made available, instead of an operator hand-typing
   the capability into a command. Verified against a built wheel in a clean venv

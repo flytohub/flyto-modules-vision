@@ -46,3 +46,10 @@ dev = ["pytest>=8"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+# The lint rule set is declared, not inherited. CI installs the newest Ruff,
+# and Ruff 0.16 widened the rules it enables when none are named, which failed
+# an unchanged tree. Adopting more rules is a deliberate change made here with
+# its findings fixed in the same commit, never a side effect of a tool upgrade.
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]

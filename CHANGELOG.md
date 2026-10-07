@@ -2,6 +2,14 @@
 
 ## 0.1.0 — unreleased
 
+- The Ruff rule set is declared in `pyproject.toml` (`E4`, `E7`, `E9`, `F`).
+  CI installs the newest Ruff, and Ruff 0.16 widened its default selection,
+  which failed the first CI run on main with no code change. A repository
+  contract test fails if the declaration is removed.
+- CI installs the `build-system` requirements from `pyproject.toml`. The
+  wheel test builds with `--no-isolation`, and Python 3.12 ships without
+  setuptools, so the 3.12 leg could not build. That test now reports the
+  build's stderr when it fails.
 - First release. One step, `vision.observe`, which reports what a vision
   gateway on the dispatched-to machine can currently see.
 - The gateway address is configuration, never a step parameter, so identical
