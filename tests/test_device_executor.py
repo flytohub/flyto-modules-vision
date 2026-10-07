@@ -336,13 +336,16 @@ def test_loopback_http_integration_returns_fresh_metadata(monkeypatch):
 def test_built_wheel_exposes_loadable_entry_point_without_src(tmp_path):
     root = Path(__file__).parents[1]
     out = tmp_path / "dist"
-    subprocess.run(
+    built = subprocess.run(
         [sys.executable, "-m", "build", "--wheel", "--no-isolation", "--outdir", str(out)],
         cwd=root,
-        check=True,
+        check=False,
         capture_output=True,
         text=True,
     )
+    # `--no-isolation` uses this interpreter's build backend. Show why a build
+    # failed instead of only that it did.
+    assert built.returncode == 0, built.stderr.strip().splitlines()[-5:]
     wheel = next(out.glob("*.whl"))
     target = tmp_path / "target"
     with zipfile.ZipFile(wheel) as archive:

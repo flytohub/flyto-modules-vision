@@ -53,6 +53,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install ruff pytest build twine flyto-indexer
 
+      - name: Install the build backend
+        # The suite builds a wheel with `--no-isolation`, so the backend named
+        # in pyproject.toml must be in this interpreter. Python 3.12 ships
+        # without setuptools; read the requirement rather than restate it.
+        run: |
+          python -c "import tomllib; print('\\n'.join(tomllib.load(open('pyproject.toml', 'rb'))['build-system']['requires']))" > "$RUNNER_TEMP/build-requires.txt"
+          pip install -r "$RUNNER_TEMP/build-requires.txt"
+
       - name: Compile
         # `scripts/` carries no tracked sources today. The gate names it so
         # that a script added later is covered from its first commit, and the

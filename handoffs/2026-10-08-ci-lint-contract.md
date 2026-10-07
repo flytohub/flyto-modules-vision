@@ -7,7 +7,12 @@ Date: 2026-10-08
 ## What changed
 
 - `pyproject.toml`: declares `[tool.ruff.lint] select = ["E4", "E7", "E9", "F"]`.
-- `tests/test_repository_contract.py`: `test_lint_rule_set_is_declared`.
+- `tests/test_repository_contract.py`: `test_lint_rule_set_is_declared`,
+  `test_ci_provisions_the_declared_build_backend`.
+- `.github/workflows/ci.yml`: installs the `build-system` requirements read
+  from `pyproject.toml`; Python 3.12 has no setuptools, and the wheel test
+  builds with `--no-isolation`.
+- `tests/test_device_executor.py`: the wheel test reports build stderr.
 - `CHANGELOG.md`, `STATE.md`: record the cause and the evidence.
 
 ## Why
@@ -21,9 +26,11 @@ suppressions for intentional code (`exec` in a test loader, a deliberate
 
 ## Verified
 
-- The new test fails on the old `pyproject.toml` and passes on the new one.
-- Python 3.11, Ruff 0.16.10: compileall, `ruff check src tests scripts`,
-  175 tests, `python -m build`, `twine check` on both artefacts: all passed.
+- Both new tests fail on the old files and pass on the new ones. The 3.12
+  build failure (`Backend 'setuptools.build_meta' is not available`) was
+  reproduced locally before the fix.
+- Python 3.11 and 3.12, Ruff 0.16.10: compileall, `ruff check src tests scripts`,
+  176 tests, `python -m build`, `twine check` on both artefacts: all passed.
 - `flyto-index verify . --full-scan --strict --json`: 20 pass, 0 warn, 0 fail.
 
 ## Not verified
